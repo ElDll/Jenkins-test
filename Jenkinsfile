@@ -5,7 +5,7 @@ pipeline {
             steps {
             catchError {
                     script {
-                         docker.build("Test_allure", "-f Dockerfile .")
+                         docker.build("test_allure", "-f Dockerfile .")
                      }
               }
           }
@@ -25,7 +25,7 @@ pipeline {
                 script {
                  docker.image('aerokube/selenoid:1.10.4').withRun('-p 4444:4444 -v /run/docker.sock:/var/run/docker.sock -v %cd%:/etc/selenoid/',
                 '-timeout 600s -limit 2') {c ->
-                 docker.image('Test_allure').inside("--link ${c.id}:selenoid") {
+                 docker.image('test_allure').inside("--link ${c.id}:selenoid") {
                      sh "pytest -n 2 --reruns 1 ${CMD_PARAMS}"
                      }
                   }
